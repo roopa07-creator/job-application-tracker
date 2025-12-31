@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Job Application Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    input, select, button {
+      padding: 6px;
+      margin: 5px;
+    }
+    table {
+      margin-top: 15px;
+      border-collapse: collapse;
+      width: 80%;
+    }
+    th, td {
+      border: 1px solid #000;
+      padding: 8px;
+      text-align: left;
+    }
+    button {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>📋 Job Application Tracker</h2>
+
+  <p>
+    Applied: <span id="appliedCount">0</span> |
+    Interview: <span id="interviewCount">0</span> |
+    Offer: <span id="offerCount">0</span>
+  </p>
+
+  <input type="text" id="company" placeholder="Company Name">
+  <input type="text" id="role" placeholder="Job Role">
+
+  <select id="status">
+    <option>Applied</option>
+    <option>Interview</option>
+    <option>Offer</option>
+  </select>
+
+  <button onclick="addJob()">Add Job</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="jobList"></tbody>
+  </table>
+
+  <script>
+    let jobs = JSON.parse(localStorage.getItem("jobs")) || [];
+    let editIndex = -1;
+
+    function renderJobs() {
+      const jobList = document.getElementById("jobList");
+      jobList.innerHTML = "";
+
+      let applied = 0, interview = 0, offer = 0;
+
+      jobs.forEach((job, index) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${job.company}</td>
+          <td>${job.role}</td>
+          <td>${job.status}</td>
+          <td>
+            <button onclick="editJob(${index})">Edit</button>
+            <button onclick="deleteJob(${index})">❌</button>
+          </td>
+        `;
+
+        jobList.appendChild(row);
+
+        if (job.status === "Applied") applied++;
+        if (job.status === "Interview") interview++;
+        if (job.status === "Offer") offer++;
+      });
+
+      document.getElementById("appliedCount").innerText = applied;
+      document.getElementById("interviewCount").innerText = interview;
+      document.getElementById("offerCount").innerText = offer;
+    }
+
+    function addJob() {
+      const company = document.getElementById("company").value.trim();
+      const role = document.getElementById("role").value.trim();
+      const status = document.getElementById("status").value;
+
+      if (company === "" || role === "") {
+        alert("Please fill all fields");
+        return;
+      }
+
+      if (editIndex === -1) {
+        jobs.push({ company, role, status });
+      } else {
+        jobs[editIndex] = { company, role, status };
+        editIndex = -1;
+        document.querySelector("button[onclick='addJob()']").innerText = "Add Job";
+      }
+
+      localStorage.setItem("jobs", JSON.stringify(jobs));
+
+      document.getElementById("company").value = "";
+      document.getElementById("role").value = "";
+
+      renderJobs();
+    }
+
+    function editJob(index) {
+      const job = jobs[index];
+
+      document.getElementById("company").value = job.company;
+      document.getElementById("role").value = job.role;
+      document.getElementById("status").value = job.status;
+
+      editIndex = index;
+      document.querySelector("button[onclick='addJob()']").innerText = "Update Job";
+    }
+
+    function deleteJob(index) {
+      jobs.splice(index, 1);
+      localStorage.setItem("jobs", JSON.stringify(jobs));
+      renderJobs();
+    }
+
+    renderJobs();
+  </script>
+
+</body>
+</html>
