@@ -1,21 +1,25 @@
 # Job Application Tracker
 
-A Job Application Tracker built using HTML, CSS, and JavaScript.
+A simple web-based Job Application Tracker built using HTML, CSS, and JavaScript.
 
 ## Features
-- Add, Edit, Delete job applications
-- Track status: Applied, Interview, Offer
-- Auto-updating counters
-- LocalStorage persistence
+- Add job applications
+- Edit job details
+- Delete job entries
+- Status tracking (Applied / Interview / Offer)
+- Automatic status count
+- Data saved using LocalStorage
 
 ## Technologies Used
 - HTML
 - CSS
-- JavaScript (Vanilla)
+- JavaScript
+- Browser LocalStorage
 
 ## How to Run
-- Open dashboard.html using Live Server
-- Or open directly in browser
+1. Open dashboard.html in browser
+2. Add job details
+3. Edit or delete jobs as needed
 
-## Author
-Roopa H
+## Project Status
+Completed ✅
